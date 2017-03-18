@@ -66,7 +66,7 @@ public class SlugifyTest {
 		// when
 		String result = new Slugify().slugify(string);
 
-		// the		
+		// the
 		assertEquals("sz-tmszy-a-23-1o141234aaaaaeaaaeceeeeiiiinoooooeoeuuuueyssaaaaaeaaaeceeeeiiiinoooooeoeuuuueyyacelnoszzacelnoszz", result);
 	}
 
@@ -195,5 +195,17 @@ public class SlugifyTest {
 
 		// then
 		assertEquals("hello_world", result);
+	}
+
+	@Test
+	public void shouldUseSeparatorOverride() throws Exception {
+		// given
+		String string = "Hello World";
+
+		// when
+		String result = new Slugify().withSeparator("+").slugify(string);
+
+		// then
+		assertEquals("hello+world", result);
 	}
 }

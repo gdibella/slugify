@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class Slugify {
 	private static final String BUILTIN_REPLACEMENTS_FILENAME = "replacements.properties";
 	private static final Properties replacements = new Properties();
-	
+
 	private final static String EMPTY = "";
 	private final static Pattern PATTERN_NORMALIZE_NON_ASCII = Pattern.compile("[^\\p{ASCII}]+");
 	private final static Pattern PATTERN_NORMALIZE_SEPARATOR = Pattern.compile("[\\W\\s+]+");
@@ -19,8 +19,8 @@ public class Slugify {
 
 	private final Map<String, String> customReplacements = new HashMap<String, String>();
 
-	private boolean underscoreSeparator = false;
 	private boolean lowerCase = true;
+	private String separator = "-";
 
 	@Deprecated
 	public Slugify(boolean lowerCase) {
@@ -43,8 +43,14 @@ public class Slugify {
 		return this;
 	}
 
+	@Deprecated
 	public Slugify withUnderscoreSeparator(final boolean underscoreSeparator) {
-		this.underscoreSeparator = underscoreSeparator;
+		this.separator = underscoreSeparator ? "_" : "-";
+		return this;
+	}
+
+	public Slugify withSeparator(String separator) {
+		this.separator = separator;
 		return this;
 	}
 
@@ -114,7 +120,7 @@ public class Slugify {
 	private String normalize(final String input) {
 		String text = Normalizer.normalize(input, Normalizer.Form.NFKD);
 		text = PATTERN_NORMALIZE_NON_ASCII.matcher(text).replaceAll(EMPTY);
-		text = PATTERN_NORMALIZE_SEPARATOR.matcher(text).replaceAll(underscoreSeparator ? "_" : "-");
+		text = PATTERN_NORMALIZE_SEPARATOR.matcher(text).replaceAll(this.separator);
 		text = PATTERN_NORMALIZE_TRIM_DASH.matcher(text).replaceAll(EMPTY);
 
 		return text;
